@@ -109,14 +109,12 @@ var ReactS3Uploader = createReactClass({
         if ( this.props.autoUpload ) {
             additional.onChange = this.uploadFile;
         }
-        
+
         var temporaryProps = objectAssign({}, this.props, additional);
         var inputProps = {};
 
-        var invalidProps = Object.keys(ReactS3Uploader.propTypes);
-
         for(var key in temporaryProps) {
-            if(temporaryProps.hasOwnProperty(key) && invalidProps.indexOf(key) === -1) {
+            if(temporaryProps.hasOwnProperty(key)) {
                 inputProps[key] = temporaryProps[key];
             }
         }
