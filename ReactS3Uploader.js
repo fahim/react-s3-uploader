@@ -7,34 +7,36 @@ var React = require('react'),
     S3Upload = require('./s3upload.js'),
     objectAssign = require('object-assign');
 
+var ReactS3UploaderPropTypes = {
+    signingUrl: PropTypes.string,
+    getSignedUrl: PropTypes.func,
+    preprocess: PropTypes.func,
+    onSignedUrl: PropTypes.func,
+    onProgress: PropTypes.func,
+    onFinish: PropTypes.func,
+    onError: PropTypes.func,
+    signingUrlMethod: PropTypes.string,
+    signingUrlHeaders: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.func
+    ]),
+    signingUrlQueryParams: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.func
+    ]),
+    signingUrlWithCredentials: PropTypes.bool,
+    uploadRequestHeaders: PropTypes.object,
+    contentDisposition: PropTypes.string,
+    server: PropTypes.string,
+    scrubFilename: PropTypes.func,
+    s3path: PropTypes.string,
+    inputRef: PropTypes.func,
+    autoUpload: PropTypes.bool
+}
+
 var ReactS3Uploader = createReactClass({
 
-    propTypes: {
-        signingUrl: PropTypes.string,
-        getSignedUrl: PropTypes.func,
-        preprocess: PropTypes.func,
-        onSignedUrl: PropTypes.func,
-        onProgress: PropTypes.func,
-        onFinish: PropTypes.func,
-        onError: PropTypes.func,
-        signingUrlMethod: PropTypes.string,
-        signingUrlHeaders: PropTypes.oneOfType([
-          PropTypes.object,
-          PropTypes.func
-        ]),
-        signingUrlQueryParams: PropTypes.oneOfType([
-          PropTypes.object,
-          PropTypes.func
-        ]),
-        signingUrlWithCredentials: PropTypes.bool,
-        uploadRequestHeaders: PropTypes.object,
-        contentDisposition: PropTypes.string,
-        server: PropTypes.string,
-        scrubFilename: PropTypes.func,
-        s3path: PropTypes.string,
-        inputRef: PropTypes.func,
-        autoUpload: PropTypes.bool
-    },
+    propTypes: ReactS3UploaderPropTypes,
 
     getDefaultProps: function() {
         return {
@@ -113,8 +115,10 @@ var ReactS3Uploader = createReactClass({
         var temporaryProps = objectAssign({}, this.props, additional);
         var inputProps = {};
 
+        var invalidProps = Object.keys(ReactS3UploaderPropTypes);
+
         for(var key in temporaryProps) {
-            if(temporaryProps.hasOwnProperty(key)) {
+            if(temporaryProps.hasOwnProperty(key) && invalidProps.indexOf(key) === -1) {
                 inputProps[key] = temporaryProps[key];
             }
         }
